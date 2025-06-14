@@ -61,7 +61,7 @@ To compute the success rate over the last 15 minutes:
 
 ### Long-Term Aggregation (CRON)
 Every 15 minutes, a scheduled job:
-- Queries recent transactions from persistent storage
+- Queries recent transactions from the existing transactions table
 - Groups/Batches them by destination bank and time interval (e.g., 15 min, hour, etc.)
 - Writes/updates entries in an aggregate_metrics table that might look like:
 
@@ -74,7 +74,15 @@ Every 15 minutes, a scheduled job:
       total_count: 142
   }
 
-For faster queries, we might have a Primary Composite Index on `(destination_bank, interval_unit, interval_start)` because you almost always filter by bank, you may filter by interval_unit (e.g., show daily trends vs 15-min chunks), and you often query by time range (interval_start BETWEEN ...)
+For faster queries, we might have a Primary Composite Index on `(destination_bank, interval_unit, interval_start)` because you almost always filter by bank, you may filter by interval_unit (e.g., show daily trends vs 15-min chunks), and you often query by time range (interval_start BETWEEN ...). 
+
+After aggregation, older raw transactions can be handled in a number of ways, including:
+
+- Streamed to another service (e.g., Kafka → Lambda → S3) that stores the transactions in compressed .csv/.parquet format for analytical or audit purposes
+- Archived via another CRON job that:
+  - Selects and exports transactions older than N days
+  - Uploads the files to cold storage (e.g., S3)
+  - Deletes the exported data from the database
 
 ### Possible Optimizations
 
