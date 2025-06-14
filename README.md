@@ -13,7 +13,7 @@ This success rate should:
 
 ## High-Level Solution
 
-We use a **two-tiered architecture** to handle both real-time and historical needs:
+We use a **two-tiered architecture** to handle both real-time and historical needs. This two data can be created concurrently (dual write):
 
 1. **Real-Time Tier (Redis)**  
    - Aggregate transactions in 1-minute buckets using Redis
