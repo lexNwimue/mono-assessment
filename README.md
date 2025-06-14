@@ -2,7 +2,7 @@
 
 ## Problem
 
-In a banking application that integrates with multiple external banks, each outgoing transaction to a third-party bank returns a status code indicating success or failure. For operational visibility and decision support (e.g., retry logic, confidence indicators), we need to track and display the **success rate** of transactions to each destination bank.
+In a banking application that integrates with multiple external banks, each outgoing transaction to a third-party bank returns a status code indicating success or failure. For operational visibility and decision support (confidence indicators), we need to track and display the **success rate** of transactions to each destination bank.
 
 This success rate should:
 - Reflect recent behavior (e.g., last 15 minutes)
