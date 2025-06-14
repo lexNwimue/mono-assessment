@@ -76,7 +76,7 @@ Every 15 minutes, a scheduled job:
 
 For faster queries, we might have a Primary Composite Index on `(destination_bank, interval_unit, interval_start)` because you almost always filter by bank, you may filter by interval_unit (e.g., show daily trends vs 15-min chunks), and you often query by time range (interval_start BETWEEN ...). 
 
-After aggregation, older raw transactions can be handled in a number of ways, including:
+After aggregation, older raw transactions can be handled in a number of ways, depding on business requirements, including:
 
 - Streamed to another service (e.g., Kafka → Lambda → S3) that stores the transactions in compressed .csv/.parquet format for analytical or audit purposes
 - Archived via another CRON job that:
