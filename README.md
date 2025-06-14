@@ -99,6 +99,15 @@ After aggregation, older raw transactions can be handled in a number of ways, de
 
 - For Queries
   -  Materialized views for fixed window analytics (e.g., daily bank performance)
+ 
+- #### Stream Processing (Optional or Alternative)
+Use a stream processor (e.g., Apache Flink, Kafka Streams, Apache Beam) to:
+- Consume transactions as they arrive
+- Compute success metrics in near-real-time
+- Emit aggregate results directly into Redis and/or the aggregate DB table
+
+This would considerably lower latency and sliding windows would be more accurate, eliminating the need for batch CRON jobs since windows are continuously computed. 
+Although it introduces added setup complexity and operational costs
 
 ### Assumptions
 - All Redis operations are atomic and idempotent
