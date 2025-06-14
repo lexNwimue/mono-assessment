@@ -2,9 +2,8 @@
 
 ## Problem
 
-In a banking application that integrates with multiple external banks, each outgoing transaction to a third-party bank returns a status code indicating success or failure. For operational visibility and decision support (confidence indicators), we need to track and display the **success rate** of transactions to each destination bank.
+In a banking application that integrates with multiple external banks, each outgoing transaction to a third-party bank returns a status code indicating success or failure. For operational visibility and decision support (confidence indicators), we need to track and display the **success rate** of transactions to each destination bank. We assume there is an existing transactions table/collection & transactions are fetched and pushed into the system sequentially, say, via a queue. On that note, the success rate should:
 
-This success rate should:
 - Reflect recent behavior (e.g., last 15 minutes)
 - Be efficiently computed in real-time
 - Support long-term trend analysis (e.g., last week, last month)
@@ -13,10 +12,10 @@ This success rate should:
 
 ## High-Level Solution
 
-We use a **two-tiered architecture** to handle both real-time and historical needs. This two data can be created concurrently (dual write):
+We use a **two-tiered architecture** to handle both real-time and historical needs. These two data can be created concurrently (dual write):
 
 1. **Real-Time Tier (Redis)**  
-   - Aggregate transactions in 1-minute buckets using Redis
+   - Aggregate transactions in, say, 1-minute buckets using Redis
    - Keys expire after 15 minutes
    - Allows fast calculation of success rate over sliding window
 
@@ -94,9 +93,6 @@ For faster queries, we might have a Primary Composite Index on `(destination_ban
   -  Materialized views for fixed window analytics (e.g., daily bank performance)
 
 ### Assumptions
-- 
-- Transactions are pushed into the system via a queue
-- Redis stores per-minute time buckets and expires each after 15 minutes (or whatever the desired window is)
 - All Redis operations are atomic and idempotent
 - The aggregation granularity for persistent metrics is configurable
 - A successful transaction is identified using a known status code (e.g., 200)
