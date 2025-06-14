@@ -101,7 +101,7 @@ After aggregation, older raw transactions can be handled in a number of ways, de
   -  Materialized views for fixed window analytics (e.g., daily bank performance)
  
 - #### Stream Processing (Optional or Alternative)
-Use a stream processor (e.g., Apache Flink, Kafka Streams, Apache Beam) to:
+  Use a stream processor (e.g., Apache Flink, Kafka Streams, Apache Beam) to:
 - Consume transactions as they arrive
 - Compute success metrics in near-real-time
 - Emit aggregate results directly into Redis and/or the aggregate DB table
